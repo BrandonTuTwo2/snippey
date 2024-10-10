@@ -4,7 +4,11 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'login': "url('https://i.gifer.com/1Fvi.gif')"
+      }
+    },
   },
   plugins: [],
 }
