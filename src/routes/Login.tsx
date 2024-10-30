@@ -10,7 +10,6 @@ export const Login = () => {
   const handleLogin = () => {
     if (netlifyIdentity && netlifyIdentity.currentUser()) {
       netlifyIdentity.open();
-      navigate("/home");
     } else {
       netlifyIdentity.open();
       
