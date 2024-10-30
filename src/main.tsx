@@ -7,6 +7,7 @@ import {
 import App from './App.tsx'
 import { Login } from './routes/Login.tsx';
 import './index.css'
+import netlifyIdentity from 'netlify-identity-widget';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,9 @@ const router = createBrowserRouter([
     element: <App/>
   },
 ]);
+
+window.netlifyIdentity = netlifyIdentity;
+netlifyIdentity.init();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
