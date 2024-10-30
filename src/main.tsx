@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-window.netlifyIdentity = netlifyIdentity;
+//window.netlifyIdentity = netlifyIdentity;
 netlifyIdentity.init();
 
 createRoot(document.getElementById('root')!).render(

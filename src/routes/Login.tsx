@@ -1,6 +1,4 @@
-import {
-  Link,
-} from "react-router-dom";
+//import { Link, } from "react-router-dom";
 
 import netlifyIdentity from 'netlify-identity-widget';
 
@@ -10,7 +8,7 @@ export const Login = () => {
     netlifyIdentity.open();
   }
 
-  
+
 
   return (
     <div id="login" className="w-full relative bg-no-repeat bg-cover h-[500px] z-0 overflow-hidden bg-login">
