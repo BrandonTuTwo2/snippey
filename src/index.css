@@ -1,20 +1,52 @@
+:root  {
+  --background: 213 100% 95%;
+  --foreground: 213 5% 10%;
+  --card: 213 50% 90%;
+  --card-foreground: 213 5% 15%;
+  --popover: 213 100% 95%;
+  --popover-foreground: 213 100% 10%;
+  --primary: 213 48% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 213 30% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 175 30% 85%;
+  --muted-foreground: 213 5% 40%;
+  --accent: 175 30% 80%;
+  --accent-foreground: 213 5% 15%;
+  --destructive: 0 100% 47%;
+  --destructive-foreground: 213 5% 90%;
+  --border: 213 30% 50%;
+  --input: 213 30% 47%;
+  --ring: 213 48% 48%;
+  --radius: 0.5rem;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.dark  {
+  --background: 213 50% 10%;
+  --foreground: 213 5% 90%;
+  --card: 213 50% 10%;
+  --card-foreground: 213 5% 90%;
+  --popover: 213 50% 5%;
+  --popover-foreground: 213 5% 90%;
+  --primary: 213 48% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 213 30% 20%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 175 30% 25%;
+  --muted-foreground: 213 5% 60%;
+  --accent: 175 30% 25%;
+  --accent-foreground: 213 5% 90%;
+  --destructive: 0 100% 47%;
+  --destructive-foreground: 213 5% 90%;
+  --border: 213 30% 47%;
+  --input: 213 30% 47%;
+  --ring: 213 48% 48%;
+  --radius: 0.5rem;
 }
 
 a {
@@ -29,8 +61,10 @@ a:hover {
 #login{
   margin: 0;
   padding: 0;
+  min-width: 100vh;
   min-height: 100vh;
 }
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -55,15 +89,4 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+

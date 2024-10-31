@@ -9,7 +9,7 @@ export const Login = () => {
 
   const handleLogin = () => {
     if (netlifyIdentity && netlifyIdentity.currentUser()) {
-      netlifyIdentity.open();
+      navigate("/home");
     } else {
       netlifyIdentity.open();
       
@@ -19,7 +19,7 @@ export const Login = () => {
 
 
   return (
-    <div id="login" className="w-full relative bg-no-repeat bg-cover h-[500px] z-0 overflow-hidden bg-login">
+    <div id="login" className="w-full relative bg-no-repeat bg-cover h-[500px] z-0 overflow-hidden bg-login" >
       <div className="relative top-0 left-0 w-full h-full z-10 bg-black/50 flex items-center justify-center flex-col gap-5 pt-32">
         <h2 className="text-4xl font-bold font-manrope text-white">Snippey</h2>
         <h6 className="text-xl font-bold font-manrope text-white">A code snippet tool</h6>
