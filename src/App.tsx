@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import netlifyIdentity from 'netlify-identity-widget';
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from './components/plusicon';
+import { StickyNote } from './components/stickynote';
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -17,12 +17,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 
 import './App.css'
-import React from 'react';
 
 type CodeSnippet = {
   title: string;
   body: string;
-  tags: [string]; //its going to be empty for now
+  tags: string[]; //its going to be empty for now
 }
 
 
@@ -30,6 +29,7 @@ function App() {
   const navigate = useNavigate();
   const loggedIn = (netlifyIdentity && netlifyIdentity.currentUser());
   const [newSnippet, setNewSnippet] = useState<CodeSnippet>();
+
   useEffect(() => {
     if (!loggedIn) {
       console.log("NOT LOGGED IN");
@@ -41,9 +41,7 @@ function App() {
     <><div className='test'>
       <h1 className='font-mono'>Snippey</h1>
       <div className="card">
-        <p>
-          snippy bookmarks go here
-        </p>
+      <StickyNote title="TEST" body="TEST" tags={["test","beans"]} />
       </div>
       <Drawer>
         <DrawerTrigger asChild>
@@ -69,7 +67,6 @@ function App() {
             <DrawerFooter>
               <DrawerClose asChild>
                 <Button type='submit' onClick={() => {
-                  console.log("HI");
                   const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
                   const bodyVal = (document.getElementById("codeSnippetBody") as HTMLInputElement).value;
                   const tempy = { title: titleVal, body: bodyVal, tags: [""] } as CodeSnippet;
