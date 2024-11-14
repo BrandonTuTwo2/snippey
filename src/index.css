@@ -104,3 +104,22 @@ body {
 .beans {
   color: rgb(10 10 10) !important; 
 }
+
+.bg-destructive {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--destructive) / var(--tw-bg-opacity));
+}
+
+.text-destructive-foreground {
+  --tw-text-opacity: 1;
+  color: hsl(var(--destructive-foreground) / var(--tw-text-opacity));
+}
+
+.hover\:bg-destructive\/90:hover {
+  background-color: hsl(var(--destructive) / .9);
+}
+
+textarea[disabled]::placeholder {
+  color: black !important;
+}
+
