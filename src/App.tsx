@@ -35,6 +35,15 @@ function App() {
       console.log("NOT LOGGED IN");
       navigate("/");
     }
+
+    const test = async () =>{
+      const res = await fetch('/api/test');
+      const resJSON = await res.json();
+      console.log(res)
+      console.log(resJSON)
+    }
+
+    test();
   }, [loggedIn, navigate]);
 
   return (
