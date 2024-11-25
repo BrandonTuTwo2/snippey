@@ -8,7 +8,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
-export const StickyNote = ({ title, body, tags }) => {
+interface Props {
+    title?: string,
+    body?: string,
+    tags?: string[]
+}
+
+export const StickyNote = ({ title, body, tags } : Props) => {
 
     return <>
         <Card className="bg-yellow-500 m-5 size-96">

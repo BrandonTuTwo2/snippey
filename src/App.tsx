@@ -22,6 +22,7 @@ type CodeSnippet = {
   title: string;
   body: string;
   tags: string[]; //its going to be empty for now
+  user: string;
 }
 
 
@@ -30,20 +31,39 @@ function App() {
   const loggedIn = (netlifyIdentity && netlifyIdentity.currentUser());
   const [newSnippet, setNewSnippet] = useState<CodeSnippet>();
 
+  const addSticky = async () => {
+
+    const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
+    const bodyVal = (document.getElementById("codeSnippetBody") as HTMLInputElement).value;
+    const tempy = { title: titleVal, body: bodyVal, tags: [""], user: netlifyIdentity.currentUser()?.email } as CodeSnippet;
+    console.log("HUH?");
+    const res = await fetch('/api/add', {
+      method: 'POST',
+      body: JSON.stringify(tempy)
+    })
+    const resReturn = await res;
+    setNewSnippet(tempy);
+    console.log("HI MEEEEE");
+    console.log(resReturn);
+    console.log(newSnippet);
+  };
+
   useEffect(() => {
     if (!loggedIn) {
       console.log("NOT LOGGED IN");
       navigate("/");
+    } else {
+      console.log(netlifyIdentity.currentUser())
     }
 
-    const test = async () =>{
-      const res = await fetch('/api/test');
-      const resJSON = await res.json();
-      console.log(res)
-      console.log(resJSON)
-    }
+    //const test = async () =>{
+    //  const res = await fetch('/api/test');
+    //  const resJSON = await res.json();
+    //  console.log(res)
+    //  console.log(resJSON)
+    //}
 
-    test();
+    //test();
   }, [loggedIn, navigate]);
 
   return (
@@ -75,12 +95,7 @@ function App() {
             </div>
             <DrawerFooter>
               <DrawerClose asChild>
-                <Button type='submit' onClick={() => {
-                  const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
-                  const bodyVal = (document.getElementById("codeSnippetBody") as HTMLInputElement).value;
-                  const tempy = { title: titleVal, body: bodyVal, tags: [""] } as CodeSnippet;
-                  setNewSnippet(tempy); //might not even be needed tbh
-                }}>Submit</Button>
+                <Button type='submit' onClick={addSticky}>Submit</Button>
               </DrawerClose>
               <DrawerClose asChild>
                 <Button variant="outline">Cancel</Button>
