@@ -21,13 +21,16 @@ router.get("/test", async (req, res) => {
   });
 });
 
-router.get("/getAll", async (req, res) => {
+router.post("/getAll", async (req, res) => {
   const collection = await db.collection("sticky_notes");
+  const req_author_id = JSON.parse(req.body).author_id;
+  const query = { author_id: req_author_id };
   //Remember to sort by email first
-  const resTest = await collection.find({}).toArray();
+
+  const result = await collection.find(query).toArray();
 
   res.send({
-    body: resTest,
+    body: result,
   });
 });
 
@@ -56,7 +59,7 @@ router.patch("/update", async (req, res) => {
   });
 });
 
-router.post("/delete", async (req, res) => {
+router.delete("/delete", async (req, res) => {
   res.send({
     body: "HI",
   });

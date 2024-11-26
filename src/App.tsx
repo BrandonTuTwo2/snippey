@@ -30,7 +30,7 @@ function App() {
   const navigate = useNavigate();
   const loggedIn = (netlifyIdentity && netlifyIdentity.currentUser());
   const [newSnippet, setNewSnippet] = useState<CodeSnippet>();
-
+  const [curSnippets, setCurrSnippets] = useState<CodeSnippet[]>([]);
   const addSticky = async () => {
 
     const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
@@ -47,7 +47,8 @@ function App() {
     console.log(resReturn);
     console.log(newSnippet);
   };
-
+  
+  //Only once
   useEffect(() => {
     if (!loggedIn) {
       console.log("NOT LOGGED IN");
@@ -56,22 +57,33 @@ function App() {
       console.log(netlifyIdentity.currentUser())
     }
 
-    //const test = async () =>{
-    //  const res = await fetch('/api/test');
-    //  const resJSON = await res.json();
-    //  console.log(res)
-    //  console.log(resJSON)
-    //}
+    const test = async () =>{
+      const testJSON = {
+        author_id: netlifyIdentity.currentUser()?.email
+      }
+      const res = await fetch('/api/getAll',{
+        method: 'POST',
+        body: JSON.stringify(testJSON)
+      });
+      const resJSON = await res.json();
+      setCurrSnippets(resJSON.body);
+      console.log("HI MEMEEEE");
+      console.log(curSnippets);
+    }
 
-    //test();
-  }, [loggedIn, navigate]);
+    test();
+
+  }, []);
 
   return (
     <><div className='test'>
       <h1 className='font-mono'>Snippey</h1>
-      <div className="card">
-      <StickyNote title="TEST" body="TEST" tags={["test","beans"]} />
-      </div>
+      {curSnippets.map((snippet) =>
+        <div className="card">
+        <StickyNote title={snippet.name} body={snippet.body} tags={snippet.tags} />
+        </div>
+      )}
+
       <Drawer>
         <DrawerTrigger asChild>
           <div className="fixed bottom-4 right-4 z-50">
