@@ -38,7 +38,7 @@ router.post("/add", async (req, res) => {
   const reqVals = JSON.parse(req.body)
   try{
     const newSticky = {
-        name: reqVals.title,
+        name: reqVals.name,
         body: reqVals.body,
         author_id: reqVals.user,
         tags: []

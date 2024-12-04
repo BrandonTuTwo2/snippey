@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import './App.css'
 
 type CodeSnippet = {
-  title: string;
+  name: string;
   body: string;
   tags: string[]; //its going to be empty for now
   user: string;
@@ -35,7 +35,7 @@ function App() {
 
     const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
     const bodyVal = (document.getElementById("codeSnippetBody") as HTMLInputElement).value;
-    const tempy = { title: titleVal, body: bodyVal, tags: [""], user: netlifyIdentity.currentUser()?.email } as CodeSnippet;
+    const tempy = { name: titleVal, body: bodyVal, tags: [""], user: netlifyIdentity.currentUser()?.email } as CodeSnippet;
     console.log("HUH?");
     const res = await fetch('/api/add', {
       method: 'POST',
@@ -47,7 +47,20 @@ function App() {
     console.log(resReturn);
     console.log(newSnippet);
   };
-  
+
+  const test = async () => {
+    const testJSON = {
+      author_id: netlifyIdentity.currentUser()?.email
+    }
+    const res = await fetch('/api/getAll', {
+      method: 'POST',
+      body: JSON.stringify(testJSON)
+    });
+    const resJSON = await res.json();
+    setCurrSnippets(resJSON.body);
+    console.log(curSnippets);
+  }
+
   //Only once
   useEffect(() => {
     if (!loggedIn) {
@@ -57,32 +70,33 @@ function App() {
       console.log(netlifyIdentity.currentUser())
     }
 
-    const test = async () =>{
-      const testJSON = {
-        author_id: netlifyIdentity.currentUser()?.email
-      }
-      const res = await fetch('/api/getAll',{
-        method: 'POST',
-        body: JSON.stringify(testJSON)
-      });
-      const resJSON = await res.json();
-      setCurrSnippets(resJSON.body);
-      console.log("HI MEMEEEE");
-      console.log(curSnippets);
-    }
+    console.log("RUN ONCE");
+
+
 
     test();
 
   }, []);
 
+
+  //every time a new snippet is added this should update the front end hopefully
+  useEffect(() => {
+    console.log("RAN IT???");
+    test();
+  }, [newSnippet])
+
+
+
+
+
   return (
     <><div className='test'>
       <h1 className='font-mono'>Snippey</h1>
-      {curSnippets.map((snippet) =>
-        <div className="card">
-        <StickyNote title={snippet.name} body={snippet.body} tags={snippet.tags} />
-        </div>
-      )}
+      <div className="grid grid-cols-4 p-24 place-items-center">
+        {curSnippets.map((snippet,i) =>
+            <StickyNote title={snippet.name} body={snippet.body} tags={snippet.tags}  key={`stickynote-${i}`} />
+        )}
+      </div>
 
       <Drawer>
         <DrawerTrigger asChild>
