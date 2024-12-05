@@ -28,10 +28,28 @@ router.post("/getAll", async (req, res) => {
   //Remember to sort by email first
 
   const result = await collection.find(query).toArray();
+  //const testbeans = await collection.find({name: "404"}).toArray();
+  //console.log("HI MEEEEEEE");
+  //console.log(testbeans);
 
   res.send({
     body: result,
   });
+});
+
+//for now its a separate function but I could probably add it to the above
+router.post("/checkExist", async(req,res) =>{
+  const collection = await db.collection("sticky_notes");
+  const post_name = JSON.parse(req.body).name;
+  const query = {name: post_name};
+
+  const result = await collection.find(query).toArray();
+  //console.log("MEMEMEMEME")
+  //console.log(result)
+  //If result.length != 0  then it means something with the same name already exist and vise versa
+  res.send({
+    body: {exist: (result.length != 0)}
+  })
 });
 
 router.post("/add", async (req, res) => {
@@ -45,6 +63,8 @@ router.post("/add", async (req, res) => {
     }
     console.log(newSticky);
     const collection = await db.collection("sticky_notes");
+
+
     const result = await collection.insertOne(newSticky);
     res.sendStatus(204);
   } catch (err) {
@@ -60,9 +80,16 @@ router.patch("/update", async (req, res) => {
 });
 
 router.delete("/delete", async (req, res) => {
-  res.send({
-    body: "HI",
-  });
+  const collection = await db.collection("sticky_notes");
+  const post_name = JSON.parse(req.body).name;
+  const query = {name: post_name};
+  try {
+    const result = await collection.deleteOne(query);
+    res.sendStatus(200)
+  } catch (err){
+    console.log(err)
+    res.status(500).send("Failed to delete sticky note");
+  }
 });
 
 api.use("/api/", router);

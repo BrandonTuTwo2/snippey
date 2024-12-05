@@ -36,16 +36,27 @@ function App() {
     const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
     const bodyVal = (document.getElementById("codeSnippetBody") as HTMLInputElement).value;
     const tempy = { name: titleVal, body: bodyVal, tags: [""], user: netlifyIdentity.currentUser()?.email } as CodeSnippet;
-    console.log("HUH?");
-    const res = await fetch('/api/add', {
+
+    const checkBefore = await fetch('/api/checkExist', {
       method: 'POST',
       body: JSON.stringify(tempy)
     })
-    const resReturn = await res;
-    setNewSnippet(tempy);
-    console.log("HI MEEEEE");
-    console.log(resReturn);
-    console.log(newSnippet);
+    const checkBeforeRes = await checkBefore.json();
+    console.log(checkBeforeRes)
+    if (checkBeforeRes.body.exist) {
+      console.log("ERROR HANDLING + IT ALREADY EXIST");
+    } else{
+      console.log("HUH?");
+      const res = await fetch('/api/add', {
+        method: 'POST',
+        body: JSON.stringify(tempy)
+      })
+      const resReturn = await res;
+      setNewSnippet(tempy);
+      console.log("HI MEEEEE");
+      console.log(resReturn);
+      console.log(newSnippet);
+    }
   };
 
   const test = async () => {
