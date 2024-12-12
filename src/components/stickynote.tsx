@@ -19,6 +19,21 @@ export const StickyNote = ({ title, body, tags }: Props) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [stickyNoteState, setStickyNoteState] = useState("");
 
+    const updateBody = async (newBody: string) => {
+        const req = {
+            post_name: title,
+            newBody: newBody
+        }
+
+        const res = await fetch('/api/update',{
+            method: 'PATCH',
+            body: JSON.stringify(req)
+        })
+
+        const resReturn = await res;
+        console.log(resReturn);
+    }
+
     const deleteStickyNote = async () => {
         const tempy = { name: title }
 
@@ -47,8 +62,8 @@ export const StickyNote = ({ title, body, tags }: Props) => {
     useEffect(() =>{
         const textArea = document.getElementById(`${title}-textArea`) as HTMLTextAreaElement
         if (isDisabled &&  textArea.value) {
-            //this also runs on creation so we might need to change it
             console.log("API CALLED TO SAVE CHANGE");
+            updateBody(textArea.value);
         } 
     },[isDisabled])
 

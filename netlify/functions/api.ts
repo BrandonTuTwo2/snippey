@@ -74,9 +74,24 @@ router.post("/add", async (req, res) => {
 });
 
 router.patch("/update", async (req, res) => {
-  res.send({
-    body: "HI",
-  });
+  const collection = await db.collection("sticky_notes");
+  const vals = JSON.parse(req.body);
+  const query = {
+    name: vals.post_name
+  };
+  const update = {
+    $set: {body: vals.newBody}
+  };
+  console.log("The dimes")
+  console.log(query)
+  console.log(update)
+
+  try {
+    const result = await collection.updateOne(query,update);
+    res.sendStatus(200)
+  } catch(e) {
+    console.log(e)
+  }
 });
 
 router.delete("/delete", async (req, res) => {
