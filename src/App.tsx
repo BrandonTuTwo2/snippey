@@ -6,7 +6,6 @@ import { PlusIcon } from './components/plusicon';
 import { StickyNote } from './components/stickynote';
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
