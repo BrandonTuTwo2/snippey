@@ -31,6 +31,9 @@ function App() {
   const loggedIn = (netlifyIdentity && netlifyIdentity.currentUser());
   const [newSnippet, setNewSnippet] = useState<CodeSnippet>();
   const [curSnippets, setCurrSnippets] = useState<CodeSnippet[]>([]);
+  const [titleBoxStyling,setTitleBoxStyling] = useState("mb-2") // mb-2 outline outline-red-600
+  const [titlePlaceHolderText,setTitlePlaceHolderText] = useState("Title");
+  const [isOpen, setIsOpen] = useState(false);
   const addSticky = async () => {
 
     const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
@@ -43,9 +46,16 @@ function App() {
     })
     const checkBeforeRes = await checkBefore.json();
     console.log(checkBeforeRes)
-    if (checkBeforeRes.body.exist) {
+
+    if (!titleVal || checkBeforeRes.body.exist) {
+      const input  = document.getElementById("codeSnippetTitle") as HTMLInputElement
       console.log("ERROR HANDLING + IT ALREADY EXIST");
+      setTitleBoxStyling("mb-2 outline outline-red-600");
+      setTitlePlaceHolderText("This title doesn't exist or you forgot to input a title");
+      input.value = "";
     } else{
+      setTitleBoxStyling("mb-2");
+      setTitlePlaceHolderText("Title");
       console.log("HUH?");
       const res = await fetch('/api/add', {
         method: 'POST',
@@ -56,6 +66,7 @@ function App() {
       console.log("HI MEEEEE");
       console.log(resReturn);
       console.log(newSnippet);
+      setIsOpen(false);
     }
   };
 
@@ -109,7 +120,7 @@ function App() {
         )}
       </div>
 
-      <Drawer>
+      <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerTrigger asChild>
           <div className="fixed bottom-4 right-4 z-50">
             <Button
@@ -127,16 +138,11 @@ function App() {
               <DrawerTitle className='flex items-center justify-center'>Add Sticky Note</DrawerTitle>
             </DrawerHeader>
             <div className="p-4 pb-0">
-              <Input className="mb-2" placeholder='Title' id="codeSnippetTitle"></Input>
+              <Input className={titleBoxStyling} placeholder={titlePlaceHolderText} id="codeSnippetTitle"></Input>
               <Textarea placeholder='Copy & Paste or enter in manually' id="codeSnippetBody"></Textarea>
             </div>
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button type='submit' onClick={addSticky}>Submit</Button>
-              </DrawerClose>
-              <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DrawerClose>
+            <DrawerFooter id="testMachine">
+              <Button  className="text-black"type='submit' onClick={addSticky}>Submit</Button>
             </DrawerFooter>
           </div>
         </DrawerContent>
