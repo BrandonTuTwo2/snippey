@@ -30,14 +30,15 @@ function App() {
   const loggedIn = (netlifyIdentity && netlifyIdentity.currentUser());
   const [newSnippet, setNewSnippet] = useState<CodeSnippet>();
   const [curSnippets, setCurrSnippets] = useState<CodeSnippet[]>([]);
-  const [titleBoxStyling,setTitleBoxStyling] = useState("mb-2") // mb-2 outline outline-red-600
-  const [titlePlaceHolderText,setTitlePlaceHolderText] = useState("Title");
+  const [titleBoxStyling, setTitleBoxStyling] = useState("mb-2") // mb-2 outline outline-red-600
+  const [titlePlaceHolderText, setTitlePlaceHolderText] = useState("Title");
   const [isOpen, setIsOpen] = useState(false);
   const addSticky = async () => {
 
     const titleVal = (document.getElementById("codeSnippetTitle") as HTMLInputElement).value;
     const bodyVal = (document.getElementById("codeSnippetBody") as HTMLInputElement).value;
-    const tempy = { name: titleVal, body: bodyVal, tags: [""], user: netlifyIdentity.currentUser()?.email } as CodeSnippet;
+    const tagVal = (document.getElementById("codeSnippetTags") as HTMLInputElement).value.replace(/\s/g, "").split(","); //removes spaces too
+    const tempy = { name: titleVal, body: bodyVal, tags: tagVal, user: netlifyIdentity.currentUser()?.email } as CodeSnippet;
 
     const checkBefore = await fetch('/api/checkExist', {
       method: 'POST',
@@ -47,13 +48,13 @@ function App() {
     console.log(checkBeforeRes)
 
     if (!titleVal || checkBeforeRes.body.exist) {
-      const input  = document.getElementById("codeSnippetTitle") as HTMLInputElement
+      const input = document.getElementById("codeSnippetTitle") as HTMLInputElement
       console.log("ERROR HANDLING + IT ALREADY EXIST");
-      setTitleBoxStyling("mb-2 outline outline-red-600");
+      setTitleBoxStyling("outline outline-red-600");
       setTitlePlaceHolderText("This title doesn't exist or you forgot to input a title");
       input.value = "";
-    } else{
-      setTitleBoxStyling("mb-2");
+    } else {
+      setTitleBoxStyling("");
       setTitlePlaceHolderText("Title");
       console.log("HUH?");
       const res = await fetch('/api/add', {
@@ -69,18 +70,26 @@ function App() {
     }
   };
 
-  const test = async () => {
-    const testJSON = {
-      author_id: netlifyIdentity.currentUser()?.email
+
+  const refreshSticky = async (filters: string[]) => {
+    const refreshStickyJSON = {
+      author_id: netlifyIdentity.currentUser()?.email,
+      tags: filters
     }
     const res = await fetch('/api/getAll', {
       method: 'POST',
-      body: JSON.stringify(testJSON)
+      body: JSON.stringify(refreshStickyJSON)
     });
     const resJSON = await res.json();
     setCurrSnippets(resJSON.body);
     console.log(curSnippets);
   }
+
+  const refreshWFilters = () =>{ //This could mayhaps just be inside the button, a bit too bare to be its own function
+    const tagFilters =(document.getElementById("tagFilters") as HTMLInputElement).value.replace(/\s/g, "").split(",");
+    refreshSticky(tagFilters);
+  }
+
 
   //Only once
   useEffect(() => {
@@ -95,7 +104,7 @@ function App() {
 
 
 
-    test();
+    refreshSticky([]);
 
   }, []);
 
@@ -103,7 +112,7 @@ function App() {
   //every time a new snippet is added this should update the front end hopefully
   useEffect(() => {
     console.log("RAN IT???");
-    test();
+    refreshSticky([]);
   }, [newSnippet])
 
 
@@ -111,11 +120,17 @@ function App() {
 
 
   return (
-    <><div className='test'>
+    <><div className='refreshSticky'>
       <h1 className='font-mono'>Snippey</h1>
+      <div className="mx-auto flex w-full max-w-sm  items-center justify-center  space-x-2 pt-2">
+        <Input className="" placeholder="enter,tags,separated,by,comma" id="tagFilters"></Input>
+        <Button className="text-black" onClick={refreshWFilters}>Filter</Button>
+        <Button variant="destructive" className="text-black" onClick={() =>{refreshSticky([])}}>Reset</Button>
+      </div>
+
       <div className="grid grid-cols-4 p-24 place-items-center">
-        {curSnippets.map((snippet,i) =>
-            <StickyNote title={snippet.name} body={snippet.body} tags={snippet.tags}  key={`stickynote-${i}`} />
+        {curSnippets.map((snippet, i) =>
+          <StickyNote title={snippet.name} body={snippet.body} tags={snippet.tags} key={`stickynote-${i}`} />
         )}
       </div>
 
@@ -138,10 +153,11 @@ function App() {
             </DrawerHeader>
             <div className="p-4 pb-0">
               <Input className={titleBoxStyling} placeholder={titlePlaceHolderText} id="codeSnippetTitle"></Input>
-              <Textarea placeholder='Copy & Paste or enter in manually' id="codeSnippetBody"></Textarea>
+              <Textarea className="mb-2 mt-2" placeholder='Copy & Paste or enter in manually' id="codeSnippetBody"></Textarea>
+              <Input placeholder="enter,tags,separated,by,comma" id="codeSnippetTags"></Input>
             </div>
-            <DrawerFooter id="testMachine">
-              <Button  className="text-black"type='submit' onClick={addSticky}>Submit</Button>
+            <DrawerFooter id="refreshStickyMachine">
+              <Button className="text-black" type='submit' onClick={addSticky}>Submit</Button>
             </DrawerFooter>
           </div>
         </DrawerContent>

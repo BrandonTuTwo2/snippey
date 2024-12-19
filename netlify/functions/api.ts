@@ -24,7 +24,12 @@ router.get("/test", async (req, res) => {
 router.post("/getAll", async (req, res) => {
   const collection = await db.collection("sticky_notes");
   const req_author_id = JSON.parse(req.body).author_id;
-  const query = { author_id: req_author_id };
+  const req_tag_filters = JSON.parse(req.body).tags;
+  let query = { author_id: req_author_id};
+
+  if (req_tag_filters !== undefined && req_tag_filters.length != 0) {
+    query = Object.assign({tags: {$in: req_tag_filters}})
+  }
   //Remember to sort by email first
 
   const result = await collection.find(query).toArray();
@@ -59,7 +64,7 @@ router.post("/add", async (req, res) => {
         name: reqVals.name,
         body: reqVals.body,
         author_id: reqVals.user,
-        tags: []
+        tags: reqVals.tags
     }
     console.log(newSticky);
     const collection = await db.collection("sticky_notes");

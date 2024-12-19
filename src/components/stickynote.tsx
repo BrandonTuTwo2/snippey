@@ -18,6 +18,10 @@ interface Props {
 export const StickyNote = ({ title, body, tags }: Props) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [stickyNoteState, setStickyNoteState] = useState("");
+    const [stickynoteTags] = useState(() => {
+        const hashed = tags?.map(i => "#" + i);
+        return hashed?.join(" ")
+    });
 
     const updateBody = async (newBody: string) => {
         const req = {
@@ -86,7 +90,7 @@ export const StickyNote = ({ title, body, tags }: Props) => {
                         <Button className="hover:bg-sky-700 active:bg-sky-800" onClick={copyToClipboard}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg></Button>
                     </div>
                     <div>
-                        <p>##{tags}</p>
+                        <p>{stickynoteTags}</p>
                     </div>
                 </CardFooter>
             </Card>
