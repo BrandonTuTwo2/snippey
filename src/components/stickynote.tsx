@@ -41,7 +41,7 @@ export const StickyNote = ({ title, body, tags }: Props) => {
     const deleteStickyNote = async () => {
         const tempy = { name: title }
 
-        const res = await fetch('/api/delete', {
+        await fetch('/api/delete', {
             method: 'DELETE',
             body: JSON.stringify(tempy)
         })
