@@ -45,7 +45,6 @@ export const StickyNote = ({ title, body, tags }: Props) => {
             method: 'DELETE',
             body: JSON.stringify(tempy)
         })
-        const resReturn = await res;
         //I could maybe set the sticky note display to none for now
         setStickyNoteState("hidden");
         console.log("DONE");
