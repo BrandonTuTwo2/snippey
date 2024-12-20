@@ -9,18 +9,6 @@ require("dotenv").config();
 const api = express();
 const router = Router();
 
-router.get("/test", async (req, res) => {
-  const collection = await db.collection("sticky_notes");
-  const resTest = await collection.find({}).toArray();
-
-  console.log("HI");
-  console.log(resTest);
-
-  res.send({
-    body: "HI",
-  });
-});
-
 router.post("/getAll", async (req, res) => {
   const collection = await db.collection("sticky_notes");
   const req_author_id = JSON.parse(req.body).author_id;
