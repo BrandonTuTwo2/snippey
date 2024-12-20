@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import serverless from "serverless-http";
 import { ObjectId } from "mongodb";
-import db from "./db/connection";
+import db from "./connection";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require("dotenv").config();
