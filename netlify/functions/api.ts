@@ -24,19 +24,14 @@ router.get("/test", async (req, res) => {
 router.post("/getAll", async (req, res) => {
   const collection = await db.collection("sticky_notes");
   const req_author_id = JSON.parse(req.body).author_id;
-  const req_tag_filters = JSON.parse(req.body).tags;
+  const req_tag_filters = JSON.parse(req.body).tagFilters;
   let query = { author_id: req_author_id};
 
   if (req_tag_filters !== undefined && req_tag_filters.length != 0) {
     query = Object.assign({tags: {$in: req_tag_filters}})
   }
   //Remember to sort by email first
-
   const result = await collection.find(query).toArray();
-  //const testbeans = await collection.find({name: "404"}).toArray();
-  //console.log("HI MEEEEEEE");
-  //console.log(testbeans);
-
   res.send({
     body: result,
   });
@@ -49,8 +44,6 @@ router.post("/checkExist", async(req,res) =>{
   const query = {name: post_name};
 
   const result = await collection.find(query).toArray();
-  //console.log("MEMEMEMEME")
-  //console.log(result)
   //If result.length != 0  then it means something with the same name already exist and vise versa
   res.send({
     body: {exist: (result.length != 0)}
@@ -66,10 +59,7 @@ router.post("/add", async (req, res) => {
         author_id: reqVals.user,
         tags: reqVals.tags
     }
-    console.log(newSticky);
     const collection = await db.collection("sticky_notes");
-
-
     const result = await collection.insertOne(newSticky);
     res.sendStatus(204);
   } catch (err) {
@@ -87,15 +77,12 @@ router.patch("/update", async (req, res) => {
   const update = {
     $set: {body: vals.newBody}
   };
-  console.log("The dimes")
-  console.log(query)
-  console.log(update)
 
   try {
     const result = await collection.updateOne(query,update);
     res.sendStatus(200)
-  } catch(e) {
-    console.log(e)
+  } catch(err) {
+    console.log(err)
   }
 });
 

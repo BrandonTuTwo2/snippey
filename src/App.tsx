@@ -45,27 +45,23 @@ function App() {
       body: JSON.stringify(tempy)
     })
     const checkBeforeRes = await checkBefore.json();
-    console.log(checkBeforeRes)
 
     if (!titleVal || checkBeforeRes.body.exist) {
       const input = document.getElementById("codeSnippetTitle") as HTMLInputElement
-      console.log("ERROR HANDLING + IT ALREADY EXIST");
       setTitleBoxStyling("outline outline-red-600");
       setTitlePlaceHolderText("This title doesn't exist or you forgot to input a title");
       input.value = "";
     } else {
       setTitleBoxStyling("");
       setTitlePlaceHolderText("Title");
-      console.log("HUH?");
       const res = await fetch('/api/add', {
         method: 'POST',
         body: JSON.stringify(tempy)
       })
-      const resReturn = await res;
+      if (res.status == 200) {
+        console.log("Added successfully");
+      }
       setNewSnippet(tempy);
-      console.log("HI MEEEEE");
-      console.log(resReturn);
-      console.log(newSnippet);
       setIsOpen(false);
     }
   };
@@ -74,7 +70,7 @@ function App() {
   const refreshSticky = async (filters: string[]) => {
     const refreshStickyJSON = {
       author_id: netlifyIdentity.currentUser()?.email,
-      tags: filters
+      tagFilters: filters
     }
     const res = await fetch('/api/getAll', {
       method: 'POST',
@@ -82,7 +78,7 @@ function App() {
     });
     const resJSON = await res.json();
     setCurrSnippets(resJSON.body);
-    console.log(curSnippets);
+
   }
 
   const refreshWFilters = () =>{ //This could mayhaps just be inside the button, a bit too bare to be its own function
@@ -94,24 +90,14 @@ function App() {
   //Only once
   useEffect(() => {
     if (!loggedIn) {
-      console.log("NOT LOGGED IN");
       navigate("/");
-    } else {
-      console.log(netlifyIdentity.currentUser())
-    }
-
-    console.log("RUN ONCE");
-
-
-
+    } 
     refreshSticky([]);
-
   }, []);
 
 
   //every time a new snippet is added this should update the front end hopefully
   useEffect(() => {
-    console.log("RAN IT???");
     refreshSticky([]);
   }, [newSnippet])
 

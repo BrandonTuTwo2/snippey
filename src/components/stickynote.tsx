@@ -34,8 +34,9 @@ export const StickyNote = ({ title, body, tags }: Props) => {
             body: JSON.stringify(req)
         })
 
-        const resReturn = await res;
-        console.log(resReturn);
+        if (res.status != 200) {
+            console.error("Uh oh error");
+        } 
     }
 
     const deleteStickyNote = async () => {
@@ -47,7 +48,6 @@ export const StickyNote = ({ title, body, tags }: Props) => {
         })
         //I could maybe set the sticky note display to none for now
         setStickyNoteState("hidden");
-        console.log("DONE");
     }
 
     const copyToClipboard = async () => {
@@ -65,7 +65,6 @@ export const StickyNote = ({ title, body, tags }: Props) => {
     useEffect(() =>{
         const textArea = document.getElementById(`${title}-textArea`) as HTMLTextAreaElement
         if (isDisabled &&  textArea.value) {
-            console.log("API CALLED TO SAVE CHANGE");
             updateBody(textArea.value);
         } 
     },[isDisabled])
