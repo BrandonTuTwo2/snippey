@@ -77,8 +77,12 @@ function App() {
       body: JSON.stringify(refreshStickyJSON)
     });
     const resJSON = await res.json();
-    setCurrSnippets(resJSON.body);
 
+    if (!Array.isArray(resJSON.body) || !resJSON.body.length) {
+      console.log("Its empty!");
+    } else {
+      setCurrSnippets(resJSON.body);
+    }
   }
 
   const refreshWFilters = () =>{ //This could mayhaps just be inside the button, a bit too bare to be its own function
