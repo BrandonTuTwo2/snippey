@@ -29,7 +29,8 @@ router.post("/getAll", async (req, res) => {
 router.post("/checkExist", async(req,res) =>{
   const collection = await db.collection("sticky_notes");
   const post_name = JSON.parse(req.body).name;
-  const query = {name: post_name};
+  const userEmail = JSON.parse(req.body).user;
+  const query = {name: post_name, author_id: userEmail};
 
   const result = await collection.find(query).toArray();
   //If result.length != 0  then it means something with the same name already exist and vise versa
