@@ -9,13 +9,15 @@
   node_bundler = "esbuild"
 
 [[redirects]]
-  from = "/*"
-  to = "/"
-  status = 200
   force = true
   from = "/api/*"
   status = 200
   to = "/.netlify/functions/api/:splat"
+
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
 
   ## (optional) Settings for Netlify Dev
   ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
