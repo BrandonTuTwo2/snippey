@@ -20,7 +20,7 @@ import './App.css'
 type CodeSnippet = {
   name: string;
   body: string;
-  tags: string[]; //its going to be empty for now
+  tags: string[];
   user: string;
 }
 
